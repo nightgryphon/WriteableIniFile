@@ -13,7 +13,7 @@ Typical usage can be like this:
 
   WriteableIniFile config(&iniFile);
   config.setBuffer(buf, sizeof(buf));
-  config.fullLineComments = true;
+  config.inLineComments = false;
 
   config.openSection("Section one");
   Serial.printf("The IP is %s\r\n", getValue("IP", "-- NOT SET --"));
@@ -54,8 +54,8 @@ with value longer than available free space within line (value placeholder)
   **`bool setBuffer(char * buf, size_t asize, bool check_buf = true);`**\
     set processing buffer. Should be enough to accept any single line from this file
 
-  **`bool fullLineComments;`**\
-    Set to 'true' to disable inline comments. Default 'false'
+  **`bool inLineComments;`**\
+    Set to 'false' to disable inline comments. Default 'true'
 
   **`bool openSection(char * section);`**\
     Search for specified section and set it as current. NULL is the root section.
@@ -120,7 +120,7 @@ with value longer than available free space within line (value placeholder)
 
  Baud = 9600
  Web Server Port=80 ; comments within line. beware of ; # within parameter name or value
- ; To disable inline comments set .fullLineComments = true
+ ; To disable inline comments set .inLineComments = false
  SSID = WiFi
 
  [ Section one ]

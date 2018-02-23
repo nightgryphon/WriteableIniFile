@@ -37,7 +37,7 @@ public:
 
   WriteableIniFile(File * file);
 
-  bool fullLineComments;
+  bool inLineComments;
 
   // set processing buffer
   bool setBuffer(char * buf, size_t asize, bool check_buf = true);

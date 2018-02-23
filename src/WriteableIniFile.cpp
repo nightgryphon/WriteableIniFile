@@ -13,7 +13,7 @@ WriteableIniFile::WriteableIniFile(File * file)
 , _value_pos(0)
 , _name(NULL)
 ,_name_len(0)
-,fullLineComments(false)
+,inLineComments(true)
 ,_lastError(errorNoError)
 {
 }
@@ -98,7 +98,7 @@ bool WriteableIniFile::readLine(uint32_t &file_pos, char * &data_begin, char * &
   // Seek EOL or comment
   data_end = data_begin;
   if ( strchr(line_stop_chars, *data_end) || 
-       ( fullLineComments ? seekChar(eol_chars, data_end, buf_end) : seekChar(line_stop_chars, data_end, buf_end) ) ) {
+       ( inLineComments ? seekChar(line_stop_chars, data_end, buf_end) : seekChar(eol_chars, data_end, buf_end) ) ) {
     line_end = data_end-1;
     if (seekChar(eol_chars, line_end, buf_end)) {
       // line complete
@@ -505,20 +505,20 @@ void WriteableIniFile::printJson(Print & p) {
   char * v;
   do {
     if (cv)
-      p.write(",\r\n");
+      p.write(',');
     if (s = (_name_len > 0)) { // is section
-      p.printf("\"%s\":{\r\n", getLastName());
+      p.printf("\"%s\":{", getLastName());
     }
     cv = false;
     while(v = getValue(NULL, NULL)) {
       if (cv)
-        p.write(",\r\n");
-      p.printf("\t\"%s\":\"%s\"", getLastName(), v);
+        p.write(',');
+      p.printf("\"%s\":\"%s\"", getLastName(), v);
       cv = true;
       delay(1);
     }
     if (s)
-      p.printf("\r\n}", getLastName());
+      p.printf('}', getLastName());
   } while (nextSection());
   
   p.write('}');
