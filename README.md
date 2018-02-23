@@ -9,7 +9,7 @@ Typical usage can be like this:
 ```C++
 
   File iniFile = SPIFFS.open("/default.ini", "r+");
-  char buf[128];
+  char buf[96];
 
   WriteableIniFile config(&iniFile);
   config.setBuffer(buf, sizeof(buf));
@@ -17,6 +17,8 @@ Typical usage can be like this:
 
   config.openSection("Section one");
   Serial.printf("The IP is %s\r\n", getValue("IP", "-- NOT SET --"));
+
+
   config.setValue("Pass", "newpassword");
   config.printIni(Serial);
 
@@ -29,7 +31,9 @@ Typical usage can be like this:
 Take a look at the examples. They shold be quite self explanary.
 
 To start use WriteableIniFile you should provide an opened File to constructor and 
-set the processing buffer by calling setBuffer(buf, sizeof(buf))
+set the processing buffer by calling setBuffer(buf, sizeof(buf)).\
+The processing buffer can be shared between multiple WriteableIniFile instances but you should
+notice that every call to read/write parameters or sections will overwrite buffer data.
 
 You can use any File class which support read/write/seek/size/position functions. Initially
 this library work with SPIFFS at ESP8266 but shold work with other platforms as well
@@ -57,15 +61,16 @@ with value longer than available free space within line (value placeholder)
     Search for specified section and set it as current. NULL is the root section.
 
   **`bool nextSection();`**\
-    Move to the nearest next section. Can be used to loop through sections. 
+    Move to the nearest next section.\
+    Can be used to loop through sections. 
 
   **`void getLastName(char * &aname, size_t &name_len);`**\
-    Return the pointer and length of last found name of section or parameter.
+    Return the pointer and length of last found name of section or parameter.\
     Can be used to loop through sections.
 
   **`char * getLastName();`**\
-    Return null terminated string pointer of last found name of section or parameter.
-    The data is located within processing buffer and will be destroyed by next file read.
+    Return null terminated string pointer of last found name of section or parameter.\
+    The data is located within processing buffer and will be destroyed by next file read.\
     Can be used to loop through sections.
 
 
@@ -73,16 +78,17 @@ with value longer than available free space within line (value placeholder)
     Copy the last found value to provided buffer.
 
   **`char * getValue(char * aname, char * defval);`**\
-    Get value by name within current section.
-    On success return pointer to null terminated value string within processing buffer.
-    On not found or error returns defval
-    If aname = NULL read next name-value within current section. Can be used to loop through section values.
+    Get value by name within current section.\
+    On success return pointer to null terminated value string within processing buffer.\
+    On not found or error returns defval\
+    If aname = NULL read next name-value within current section.\
+    Can be used to loop through section values.
 
   **`void resetSection();`**\
     Used to loop through section values. Restart value loop from section start. 
 
   **`bool setValue(char * aname, char * new_val, size_t pl_bytes = 0);`**\
-    Update or create parameter within current section with new value. 
+    Update or create parameter within current section with new value.\ 
     If value fits the existing space it is updated. If not than the extra space is created by 
     moving file contents (creates temporary memory buffer while processing)
 
@@ -97,6 +103,7 @@ with value longer than available free space within line (value placeholder)
     Get last error code
 
   **`void resetError()`**\
+    Clean errors.\
     Error is not reset automatically to let you check error summary after set of operations.
 
   **`bool error()`**\
