@@ -1,0 +1,25 @@
+{
+  "name": "WriteableIniFile",
+  "keywords": "ini, config, write, file, spiffs",
+  "description": "ESP8266/Arduino Library to read/WRITE parameters in configuration .ini files",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/    /Arduino-ESP8266-Writeable-Ini-File.git"
+  },
+  "authors": 
+  [
+    {
+      "name": "Mikhail Klimushin aka Night_Gryphon",
+      "email": "ngryph@gmail.com",
+      "url": "http://www.night-gryphon.ru",
+      "maintainer": true
+    }
+  ],
+  "examples": [
+        "examples/*"
+  ]
+  "version": "1.0",
+  "frameworks": "Arduino",
+  "platforms": "*"
+}
