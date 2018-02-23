@@ -40,65 +40,66 @@ read any single line from ini file.
 The only case when extra memory allocated is appending new name-value to file or updating
 with value longer than available free space within line (value placeholder)
 
-## Basic functions:
+
+## Methods & properties:
 
 
->  `WriteableIniFile(File * file);`
+  **`WriteableIniFile(File * file);`**\
     Constructor. file should be the opened File.
 
->  `bool setBuffer(char * buf, size_t asize, bool check_buf = true);`
+  **`bool setBuffer(char * buf, size_t asize, bool check_buf = true);`**\
     set processing buffer. Should be enough to accept any single line from this file
 
->  `bool fullLineComments;`
-    Disable inline comments
+  **`bool fullLineComments;`**\
+    Set to 'true' to disable inline comments. Default 'false'
 
-  `bool openSection(char * section);`
+  **`bool openSection(char * section);`**\
     Search for specified section and set it as current. NULL is the root section.
 
-  `bool nextSection();`
+  **`bool nextSection();`**\
     Move to the nearest next section. Can be used to loop through sections. 
 
-  `void getLastName(char * &aname, size_t &name_len);`
+  **`void getLastName(char * &aname, size_t &name_len);`**\
     Return the pointer and length of last found name of section or parameter.
     Can be used to loop through sections.
 
-  char * getLastName();
+  **`char * getLastName();`**\
     Return null terminated string pointer of last found name of section or parameter.
     The data is located within processing buffer and will be destroyed by next file read.
     Can be used to loop through sections.
 
 
-  bool getValueCopy(char * aname, char * buf, size_t asize);
+  **`bool getValueCopy(char * aname, char * buf, size_t asize);`**\
     Copy the last found value to provided buffer.
 
-  char * getValue(char * aname, char * defval);
+  **`char * getValue(char * aname, char * defval);`**\
     Get value by name within current section.
     On success return pointer to null terminated value string within processing buffer.
     On not found or error returns defval
     If aname = NULL read next name-value within current section. Can be used to loop through section values.
 
-  void resetSection();
+  **`void resetSection();`**\
     Used to loop through section values. Restart value loop from section start. 
 
-  bool setValue(char * aname, char * new_val, size_t pl_bytes = 0);
+  **`bool setValue(char * aname, char * new_val, size_t pl_bytes = 0);`**\
     Update or create parameter within current section with new value. 
     If value fits the existing space it is updated. If not than the extra space is created by 
     moving file contents (creates temporary memory buffer while processing)
 
-  void printIni(Print & p);
+  **`void printIni(Print & p);`**\
     print data source file to specified printable.
 
-  void printJson(Print & p);
+  **`void printJson(Print & p);`**\
     print data in JSON format to specified printable. Can be used with web server routines.
 
 
-  error_t getLastError()
+  **`error_t getLastError()`**\
     Get last error code
 
-  void resetError()
+  **`void resetError()`**\
     Error is not reset automatically to let you check error summary after set of operations.
 
-  bool error()
+  **`bool error()`**\
     was there an error?
 
 
