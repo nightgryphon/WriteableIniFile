@@ -2,7 +2,7 @@
 ---
 
 This library allow to parse, read and write name-value pairs within .ini file.
-It supports sections, comments, adding and updating values, printing data in ini or json format.
+It supports sections, comments, adding and updating values, printing data in INI or JSON format.
 
 The library intends to provide convenient way to work with config files and to minimize memory usage. 
 All data processing is performed line by line within provided buffer. 
