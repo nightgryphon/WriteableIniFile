@@ -506,7 +506,7 @@ void WriteableIniFile::printJson(Print & p) {
   do {
     if (cv)
       p.write(',');
-    if (s = (_name_len > 0)) { // is section
+    if (s = (_name_len > 0)) { // is section?
       p.printf("\"%s\":{", getLastName());
     }
     cv = false;
@@ -518,7 +518,7 @@ void WriteableIniFile::printJson(Print & p) {
       delay(1);
     }
     if (s)
-      p.printf('}', getLastName());
+      p.write('}');
   } while (nextSection());
   
   p.write('}');
