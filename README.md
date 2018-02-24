@@ -53,7 +53,7 @@ this library work with SPIFFS at ESP8266 but shold work with other platforms as 
     Constructor. file should be the opened File.
 
   **`bool setBuffer(char * buf, size_t asize, bool check_buf = true);`**\
-    set processing buffer. Should be enough to accept any single line from this file
+    set processing buffer. Should be large enough to accept any single line from file
 
   **`bool inLineComments;`**\
     Set to 'false' to disable inline comments. Default 'true'
@@ -76,7 +76,7 @@ this library work with SPIFFS at ESP8266 but shold work with other platforms as 
 
 
   **`bool getValueCopy(char * aname, char * buf, size_t asize);`**\
-    Copy the last found value to provided buffer.
+    Copy value to provided buffer.
 
   **`char * getValue(char * aname, char * defval);`**\
     Get value by name within current section.\

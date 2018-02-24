@@ -294,7 +294,7 @@ bool WriteableIniFile::getValueCopy(char * aname, char * buf, size_t asize) {
 //  _lastError = errorNoError;
 
   if ( seekValue(aname, v, v_len, pl, pl_len) &&
-       (asize < v_len) ) {
+       (asize > v_len) ) {
     memcpy(buf, v, v_len);
     buf[v_len+1] = '\0';
     return true;
