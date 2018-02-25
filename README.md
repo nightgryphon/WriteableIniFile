@@ -2,7 +2,8 @@
 ---
 
 This library allow to parse, read and write name-value pairs within .ini file.
-It supports sections, comments, adding and updating values, printing data in INI or JSON format.
+It supports sections, comments, adding and updating values, default values, 
+printing data in INI or JSON format.
 
 The library intends to provide convenient way to work with config files and to minimize memory usage. 
 All data processing is performed line by line within provided buffer.
@@ -21,19 +22,22 @@ Typical usage can be like this:
   File iniFile = SPIFFS.open("/default.ini", "r+");
   char buf[96];
 
+  // Prepare INI file object
   WriteableIniFile config(&iniFile);
   config.setBuffer(buf, sizeof(buf));
   config.inLineComments = true;
 
+  // read value with default
   config.openSection("Section one");
   Serial.printf("The IP is %s\r\n", getValue("IP", "-- NOT SET --"));
 
-
+  // write value
   config.setValue("Pass", "newpassword");
   config.printIni(Serial);
 
   ...
 
+  // use in web server handler
   server.setContentLength(CONTENT_LENGTH_UNKNOWN);
   server.send(200, "application/json", "");
   config.printJsonChunks(server.client(), false);
