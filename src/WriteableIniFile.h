@@ -67,7 +67,12 @@ public:
   bool setValue(char * aname, char * new_val, size_t pl_bytes = 0);
 
   void printIni(Print & p);
-  void printJson(Print & p);
+
+  // JSON HTTP out
+  void   printJson(Print & p);
+  size_t getJsonSize();
+  void   printJsonChunks(Print & p, bool closeStream = false);
+
 
   error_t getLastError() {
     return _lastError;

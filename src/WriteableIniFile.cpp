@@ -506,14 +506,15 @@ void WriteableIniFile::printIni(Print & p) {
 
 
 void WriteableIniFile::printJson(Print & p) {
-  p.write('{');
-
   _section_start = 0; // main section
   _value_pos = 0;
   _name_len = 0;
   bool s;
   bool cv = false; // comma between values
   char * v;
+
+  p.write('{');
+
   do {
     if (cv)
       p.write(',');
@@ -534,3 +535,83 @@ void WriteableIniFile::printJson(Print & p) {
   
   p.write('}');
 }
+
+
+size_t WriteableIniFile::getJsonSize() {
+  // calc JSON size prevent chunked HTTP overhead
+  size_t c_size=2; // {} symbols
+
+  char * v;
+  size_t v_len;
+  uint32_t pl;
+  size_t pl_len;
+
+  bool s;
+  bool cv; // comma between values
+
+  _section_start = 0; // main section
+  _value_pos = 0;
+  _name_len = 0;
+
+  cv = false;
+  do {
+    if (cv)
+      c_size++;
+    if (_name_len)
+      c_size += _name_len+5; // "<name>":{....},
+    cv = false;
+    while (seekValue(NULL, v, v_len, pl, pl_len)) {
+      if (cv)
+        c_size++; // comma
+      c_size += _name_len + v_len + 5; // "<name>":"<value>"
+      cv = true;
+    }
+  Serial.printf("\t%d\r\n", c_size);
+  } while (nextSection());
+  Serial.printf("JSON length %d\r\n", c_size);
+
+  return c_size;
+}
+
+void WriteableIniFile::printJsonChunks(Print & p, bool closeStream) {
+  // Print JSON to HTTP client as chunked data. A lot of overhead :( 
+  // But save CPU and mem
+  char * v;
+  size_t v_len;
+  uint32_t pl;
+  size_t pl_len;
+
+  bool s;
+  bool cv; // comma between values
+
+  _section_start = 0; // main section
+  _value_pos = 0;
+  _name_len = 0;
+  cv = false;
+
+  p.write("1\r\n{\r\n");
+
+  do {
+    if (cv)
+      p.write("1\r\n,\r\n");
+    if (s = (_name_len > 0)) { // is section?
+      p.printf("%X\r\n\"%.*s\":{\r\n", _name_len+4, _name_len, _name);
+    }
+    cv = false;
+    while(seekValue(NULL, v, v_len, pl, pl_len)) {
+      if (cv)
+        p.write("1\r\n,\r\n");
+      p.printf("%X\r\n\"%.*s\":\"%.*s\"\r\n", _name_len + v_len + 5, _name_len, _name, v_len, v);
+      cv = true;
+    }
+    if (s)
+      p.write("1\r\n}\r\n");
+    delay(1); // allow other processes to run while buffer sending
+  } while (nextSection());
+  
+  p.write("1\r\n}\r\n");
+
+  if (closeStream)
+    p.write("\r\n0\r\n\r\n");
+}
+

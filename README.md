@@ -23,7 +23,7 @@ Typical usage can be like this:
 
   WriteableIniFile config(&iniFile);
   config.setBuffer(buf, sizeof(buf));
-  config.inLineComments = false;
+  config.inLineComments = true;
 
   config.openSection("Section one");
   Serial.printf("The IP is %s\r\n", getValue("IP", "-- NOT SET --"));
@@ -34,7 +34,13 @@ Typical usage can be like this:
 
   ...
 
-  config.printJson(webclient);
+  server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+  server.send(200, "application/json", "");
+  config.printJsonChunks(server.client(), false);
+
+//  client.printf("%X\r\n", config.getJsonSize());
+//  config.printJson(client);
+
 
 ```
 
@@ -103,8 +109,15 @@ this library work with SPIFFS at ESP8266 but shold work with other platforms as 
     print data source file to specified printable.
 
   **`void printJson(Print & p);`**\
-    print data in JSON format to specified printable. Can be used with web server routines.
+    print data as JSON string to specified printable.
 
+  **`size_t getJsonSize();`**\
+    calculates the JSON string length. Can be used with printJson to send data as single 
+    HTTP chunk to reduce network overhead
+
+  **`void   printJsonChunks(Print & p, bool closeStream = false);`**\
+    print JSON data in HTTP chunked transport encoding to output directly to web client stream.
+    closeStream = send final empty chunk.
 
   **`error_t getLastError()`**\
     Get last error code
