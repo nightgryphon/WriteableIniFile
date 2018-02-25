@@ -5,11 +5,14 @@ This library allow to parse, read and write name-value pairs within .ini file.
 It supports sections, comments, adding and updating values, printing data in INI or JSON format.
 
 The library intends to provide convenient way to work with config files and to minimize memory usage. 
-All data processing is performed line by line within provided buffer. 
-Buffer shold be large enough to read any single line from ini file.
+All data processing is performed line by line within provided buffer.
+The memory required is to hold one line of config file.
 
 The only case when extra memory allocated is appending new name-value to file or updating
 with value longer than available free space within line (value placeholder)
+
+Case insensitive search available using 'lowerCaseNames' property. 
+When set to true all read parameter and section names converted to lower case before compare.
 
 Typical usage can be like this:
 
@@ -57,6 +60,9 @@ this library work with SPIFFS at ESP8266 but shold work with other platforms as 
 
   **`bool inLineComments;`**\
     Set to 'false' to disable inline comments. Default 'true'
+
+  **`bool lowerCaseNames;`**\
+    Set to 'true' to convert all names to lower case for case insensitive search. Default 'false'
 
   **`bool openSection(char * section);`**\
     Search for specified section and set it as current. NULL is the root section.

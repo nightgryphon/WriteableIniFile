@@ -38,6 +38,7 @@ public:
   WriteableIniFile(File * file);
 
   bool inLineComments;
+  bool lowerCaseNames;
 
   // set processing buffer
   bool setBuffer(char * buf, size_t asize, bool check_buf = true);
@@ -105,6 +106,7 @@ protected:
   bool seekChar(const char * chars, char * &pos);
   bool seekCharNot(const char * chars, char * &pos, char * boundary);
   bool seekCharNot(const char * chars, char * &pos);
+  void str2lower(char * start, char * boundary);
 
   // search for section.
   // found => set section_pos, return true

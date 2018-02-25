@@ -14,6 +14,7 @@ WriteableIniFile::WriteableIniFile(File * file)
 , _name(NULL)
 ,_name_len(0)
 ,inLineComments(true)
+,lowerCaseNames(false)
 ,_lastError(errorNoError)
 {
 }
@@ -141,6 +142,12 @@ bool WriteableIniFile::seekCharNot(const char * chars, char * &pos) {
   return seekCharNot(chars, pos, _buf + _buf_size );
 }
 
+void WriteableIniFile::str2lower(char * start, char * boundary) {
+  char * p;
+  for (p = start; p <= boundary; p++)
+    *p = (char) tolower(*p);
+}
+
 // ------------------ sections -------------
 
 bool WriteableIniFile::seekSection(
@@ -171,6 +178,8 @@ bool WriteableIniFile::seekSection(
         // section header detected
         // skip trailing spaces. p points to ']'
 	      while (strchr(space_chars, *(--p)) && (p >= _name) );
+        if (lowerCaseNames)
+          str2lower(_name, p);
         _name_len = p - _name + 1;
         WIF_DEBUG_OUT("Section: %.*s\r\n", _name_len, _name);
         if ( (NULL == section) || 
@@ -260,6 +269,8 @@ bool WriteableIniFile::seekValue(
       value = p;
       // skip name trailing spaces. p points to separator char
       while (strchr(space_chars, *--p) && (p >= ds) );
+      if (lowerCaseNames)
+        str2lower(_name, p);
       _name_len = p - ds + 1;
       WIF_DEBUG_OUT("Value: name '%.*s' val '%.*s'\r\n", _name_len, _name, de-value, value+1);
       if ( (NULL == aname) || 
