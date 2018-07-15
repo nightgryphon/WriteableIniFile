@@ -6,36 +6,36 @@
 # Datatypes (KEYWORD1)
 #######################################
 WriteableIniFile	KEYWORD1
-error_t			KEYWORD1
+error_t	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-setBuffer		KEYWORD2
-getLastName		KEYWORD2
-openSection		KEYWORD2
-nextSection		KEYWORD2
-getValueCopy		KEYWORD2
-getValue		KEYWORD2
-resetSection		KEYWORD2
-setValue		KEYWORD2
-printIni		KEYWORD2
-printJson		KEYWORD2
-getLastError		KEYWORD2
-resetError		KEYWORD2
-error			KEYWORD2
+setBuffer	KEYWORD2
+getLastName	KEYWORD2
+openSection	KEYWORD2
+nextSection	KEYWORD2
+getValueCopy	KEYWORD2
+getValue	KEYWORD2
+resetSection	KEYWORD2
+setValue	KEYWORD2
+printIni	KEYWORD2
+printJson	KEYWORD2
+getLastError	KEYWORD2
+resetError	KEYWORD2
+error	KEYWORD2
 
 
 #######################################
 # Constants (LITERAL1)
 #######################################
 
-errorNoError		LITERAL1
+errorNoError	LITERAL1
 errorOutOfBuffer	LITERAL1
-errorFileSeek		LITERAL1
-errorFileRead		LITERAL1
-errorFileWrite		LITERAL1
-errorMalloc		LITERAL1
+errorFileSeek	LITERAL1
+errorFileRead	LITERAL1
+errorFileWrite	LITERAL1
+errorMalloc	LITERAL1
 errorInvalidParams	LITERAL1
 errorUnknownError	LITERAL1
